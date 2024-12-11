@@ -3,10 +3,92 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/> 
-    <title>Physics App</title>
+    <title>高校物理基礎計算アプリ</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            max-width: 600px;
+            margin: 20px auto;
+        }
+        label {
+            display: inline-block;
+            width: 100px;
+        }
+        input {
+            width: 100px;
+        }
+        .result {
+            background: #f7f7f7;
+            padding: 10px;
+            margin-top: 20px;
+        }
+        .formula {
+            color: #555;
+            font-size: 0.9em;
+        }
+        h1, h2 {
+            color: #333;
+        }
+    </style>
 </head>
 <body>
-    <h1>高校物理基礎計算アプリ（仮）</h1>
-    <p>ここに計算フォームや結果表示を追加していきます。</p>
+    <h1>高校物理基礎計算アプリ</h1>
+    <p>等加速度直線運動の終速度と変位を計算します。</p>
+    <form id="calcForm">
+        <div>
+            <label for="v0">初速度 v₀ (m/s): </label>
+            <input type="number" id="v0" step="any" required>
+        </div>
+        <div>
+            <label for="a">加速度 a (m/s²): </label>
+            <input type="number" id="a" step="any" required>
+        </div>
+        <div>
+            <label for="t">時間 t (s): </label>
+            <input type="number" id="t" step="any" required>
+        </div>
+        <button type="button" onclick="calculate()">計算</button>
+    </form>
+
+    <div id="result" class="result" style="display: none;"></div>
+
+    <script>
+        function calculate() {
+            // 入力値の取得
+            const v0 = parseFloat(document.getElementById('v0').value);
+            const a = parseFloat(document.getElementById('a').value);
+            const t = parseFloat(document.getElementById('t').value);
+
+            // 入力チェック（NaN対策）
+            if (isNaN(v0) || isNaN(a) || isNaN(t)) {
+                alert("正しく数値を入力してください。");
+                return;
+            }
+
+            // 計算
+            const v = v0 + a * t;
+            const x = (v0 * t) + (0.5 * a * t * t);
+
+            // 計算過程を表示する文字列作成
+            const processHTML = `
+                <h2>計算結果</h2>
+                <p>終速度 v = v₀ + a t </p>
+                <div class="formula">
+                    v = ${v0} + (${a}) × (${t}) = ${v} (m/s)
+                </div>
+                
+                <p>変位 x = v₀ t + (1/2) a t² </p>
+                <div class="formula">
+                    x = (${v0}) × (${t}) + 0.5 × (${a}) × (${t}²)
+                      = ${v0}×${t} + 0.5×${a}×${t}²
+                      = ${x} (m)
+                </div>
+            `;
+
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = processHTML;
+            resultDiv.style.display = 'block';
+        }
+    </script>
 </body>
 </html>
